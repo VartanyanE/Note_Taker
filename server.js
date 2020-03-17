@@ -13,7 +13,7 @@ let PORT = process.env.PORT || 7777;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// require('./routes/mockApiRoute')(app);
+require('./routes/apiNotes')(app);
 require("./routes/htmlRoutes")(app);
 
 
