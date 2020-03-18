@@ -1,37 +1,48 @@
-var dbJson = require("../db/db.json");
+var fs = require("fs");
+var path = require('path');
 
 module.exports = function (app) {
 
     app.get("/api/notes", function (req, res) {
-        res.json(dbJson);
+        res.sendFile(path.join(__dirname, "../db/db.json"));
+    })
+
+
+
+    app.post("/api/notes", function (req, res) {
+        let newNote = req.body;
+        fs.readFile(path.join(__dirname, "../db/db.json"), "utf-8", function (err, data) {
+            if (err) throw err;
+            let dbJSON = JSON.parse(data);
+            dbJSON.push(newNote);
+            var idNum = 0
+            //key
+            for (i = 0; i < dbJSON.length; i++) {
+                dbJSON[i].id = idNum++;
+            }
+            fs.writeFile(path.join(__dirname, "../db/db.json"), JSON.stringify(dbJSON), function (err) {
+                if (err) throw err;
+                console.log("note added");
+            });
+        })
+    });
+    app.delete("/api/notes/:id", function (req, res) {
+        fs.readFile(path.join(__dirname, "../db/db.json"), "utf-8", function (err, data) {
+            if (err) throw err;
+
+            let db = JSON.parse(data);
+            var noteID = parseInt(req.params.id);
+            console.log(db);
+            console.log(noteID);
+
+            var newDB = db.filter(num => num.id != noteID);
+
+            fs.writeFile(path.join(__dirname, "../db/db.json"), JSON.stringify(newDB), function (err) {
+                if (err) throw err;
+                console.log("note deleted");
+
+            })
+        })
     });
 
-
-
-
-    app.post("/api/tables", function (req, res) {
-        // // Note the code here. Our "server" will respond to requests and let users know if they have a table or not.
-        // // It will do this by sending out the value "true" have a table
-        // // req.body is available since we're using the body parsing middleware
-        // if (tableData.length < 5) {
-        //   tableData.push(req.body);
-        //   res.json(true);
-        // }
-        // else {
-        //   waitListData.push(req.body);
-        //   res.json(false);
-        // }
-    });
-
-    // ---------------------------------------------------------------------------
-    // I added this below code so you could clear out the table while working with the functionality.
-    // Don"t worry about it!
-
-    app.post("/api/clear", function (req, res) {
-        // Empty out the arrays of data
-        tableData.length = 0;
-        waitListData.length = 0;
-
-        res.json({ ok: true });
-    });
 };
