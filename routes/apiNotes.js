@@ -16,7 +16,7 @@ module.exports = function (app) {
             let dbJSON = JSON.parse(data);
             dbJSON.push(newNote);
             var idNum = 0
-            //key
+
             for (i = 0; i < dbJSON.length; i++) {
                 dbJSON[i].id = idNum++;
             }
