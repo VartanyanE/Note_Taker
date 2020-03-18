@@ -22,7 +22,7 @@ module.exports = function (app) {
             }
             fs.writeFile(path.join(__dirname, "../db/db.json"), JSON.stringify(dbJSON), function (err) {
                 if (err) throw err;
-                console.log("note added");
+
             });
         })
     });
@@ -32,14 +32,13 @@ module.exports = function (app) {
 
             let db = JSON.parse(data);
             var noteID = parseInt(req.params.id);
-            console.log(db);
-            console.log(noteID);
+
 
             var newDB = db.filter(num => num.id != noteID);
 
             fs.writeFile(path.join(__dirname, "../db/db.json"), JSON.stringify(newDB), function (err) {
                 if (err) throw err;
-                console.log("note deleted");
+
 
             })
         })
