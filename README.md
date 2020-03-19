@@ -6,7 +6,7 @@
 
 ## Description
 
-This is an node/express app that saves notes.
+This is a node/express app that saves notes.
 
 
 ## Table of Contents
